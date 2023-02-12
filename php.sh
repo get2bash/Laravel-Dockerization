@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# Install PHP8.1
 sudo apt install ca-certificates apt-transport-https software-properties-common
 
 sudo add-apt-repository ppa:ondrej/php
