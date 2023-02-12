@@ -20,13 +20,13 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Give ownership of the application files to the web server user
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www
 
 # Set the proper permissions for the application directories
-RUN find /var/www/html -type d -exec chmod 755 {} \;
+RUN find /var/www -type d -exec chmod 755 {} \;
 
 # Set the proper permissions for the application files
-RUN find /var/www/html -type f -exec chmod 644 {} \;
+RUN find /var/www -type f -exec chmod 644 {} \;
 
 # Set working directory
 WORKDIR /var/www
