@@ -1,12 +1,22 @@
 version: '3'
 services:
-  # App service
+  
+  #PHP Service
   app:
-    build: .
-    ports:
-      - 80:80
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bash/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
 
@@ -26,18 +36,22 @@ services:
     networks:
       - app-network
 
-  # Database service
+  #MySQL Service
   db:
-    image: mysql:5.7
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: laravel
       MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
-    ports:
-      - 3306:3306
     volumes:
-      - dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - app-network
 
