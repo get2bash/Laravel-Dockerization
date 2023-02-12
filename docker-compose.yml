@@ -1,11 +1,32 @@
 version: '3'
 services:
+  # App service
   app:
     build: .
     ports:
       - 80:80
     volumes:
       - ./:/var/www/html
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx-logs:/var/log/nginx
+    networks:
+      - app-network
+
+  # Database service
   db:
     image: mysql:5.7
     environment:
@@ -17,5 +38,14 @@ services:
       - 3306:3306
     volumes:
       - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
 volumes:
   dbdata:
+    driver: local
