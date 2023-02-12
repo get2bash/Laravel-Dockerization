@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 sudo apt install ca-certificates apt-transport-https software-properties-common
 
