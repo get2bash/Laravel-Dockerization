@@ -1,4 +1,4 @@
-FROM php:8.2.2-fpm-alpine
+FROM php:8.0.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -10,8 +10,11 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd zip --with-libzip
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Install composer for dependency management
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
